@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pay_bies",
+  "info": {
+    "singularName": "pay-by",
+    "pluralName": "pay-bies",
+    "displayName": "payBy"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "hide": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

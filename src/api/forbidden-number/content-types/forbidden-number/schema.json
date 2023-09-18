@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "forbidden_numbers",
+  "info": {
+    "singularName": "forbidden-number",
+    "pluralName": "forbidden-numbers",
+    "displayName": "forbidden Number",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "number": {
+      "type": "string",
+      "unique": true
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}

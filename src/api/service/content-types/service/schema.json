@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "services",
+  "info": {
+    "singularName": "service",
+    "pluralName": "services",
+    "displayName": "Service",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "en": {
+      "type": "string",
+      "required": true
+    },
+    "ar": {
+      "type": "string",
+      "required": true
+    },
+    "deletedBy": {
+      "type": "string"
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "hide": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

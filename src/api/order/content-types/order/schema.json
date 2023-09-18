@@ -1,0 +1,73 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Order",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "orderNo": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "appointment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::appointment.appointment"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Draft",
+        "Paid",
+        "Unpaid",
+        "Canceled"
+      ],
+      "default": "Draft",
+      "required": true
+    },
+    "orderBy": {
+      "type": "string"
+    },
+    "cash": {
+      "type": "decimal"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "discount": {
+      "type": "decimal"
+    },
+    "discountType": {
+      "type": "enumeration",
+      "enum": [
+        "cash",
+        "percent"
+      ]
+    },
+    "products": {
+      "type": "json"
+    },
+    "pay_by": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::pay-by.pay-by"
+    },
+    "employee": {
+      "type": "json"
+    },
+    "employees": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "orders"
+    }
+  }
+}
