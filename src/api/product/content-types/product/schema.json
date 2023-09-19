@@ -19,7 +19,8 @@
       "type": "decimal"
     },
     "stocks": {
-      "type": "integer"
+      "type": "integer",
+      "min": 0
     },
     "buyPrice": {
       "type": "decimal"
