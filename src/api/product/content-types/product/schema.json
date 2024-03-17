@@ -42,6 +42,14 @@
     "hide": {
       "type": "boolean",
       "default": false
+    },
+    "medicineType": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::medicine-type.medicine-type"
+    },
+    "dateExpire": {
+      "type": "date"
     }
   }
 }

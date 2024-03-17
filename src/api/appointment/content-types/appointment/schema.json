@@ -32,7 +32,7 @@
     },
     "fromDate": {
       "type": "datetime",
-      "required": true
+      "required": false
     },
     "toDate": {
       "type": "datetime"
@@ -71,6 +71,12 @@
     },
     "employee": {
       "type": "json"
+    },
+    "nho": {
+      "type": "string"
+    },
+    "birthDate": {
+      "type": "date"
     }
   }
 }
