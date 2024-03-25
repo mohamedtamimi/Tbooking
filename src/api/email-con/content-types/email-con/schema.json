@@ -1,0 +1,25 @@
+{
+  "kind": "singleType",
+  "collectionName": "email_cons",
+  "info": {
+    "singularName": "email-con",
+    "pluralName": "email-cons",
+    "displayName": "Email Config",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "from": {
+      "type": "string"
+    },
+    "to": {
+      "type": "string"
+    },
+    "replyTo": {
+      "type": "string"
+    }
+  }
+}

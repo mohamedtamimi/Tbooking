@@ -50,6 +50,9 @@
     },
     "dateExpire": {
       "type": "date"
+    },
+    "supplierContact": {
+      "type": "string"
     }
   }
 }
