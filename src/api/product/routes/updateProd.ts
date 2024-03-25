@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 module.exports = {
     routes: [
 
@@ -12,3 +13,19 @@ module.exports = {
         
     ]
 }
+=======
+module.exports = {
+    routes: [
+
+        {
+            method: 'POST',
+            path: '/sendEmail',
+            handler: 'email.sendEmail',
+            config:{
+              auth:  false
+            }
+        },
+        
+    ]
+}
+>>>>>>> Stashed changes
