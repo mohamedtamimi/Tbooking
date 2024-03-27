@@ -18,6 +18,11 @@
     "seen": {
       "type": "boolean",
       "default": false
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product"
     }
   }
 }

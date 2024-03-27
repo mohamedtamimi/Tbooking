@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 module.exports = {
     routes: [
 
@@ -13,7 +12,6 @@ module.exports = {
         
     ]
 }
-=======
 module.exports = {
     routes: [
 
@@ -28,4 +26,3 @@ module.exports = {
         
     ]
 }
->>>>>>> Stashed changes
