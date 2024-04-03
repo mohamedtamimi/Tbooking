@@ -9,6 +9,7 @@ module.exports = {
               auth:  false
             }
         },
+      
         
     ]
 }
