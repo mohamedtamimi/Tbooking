@@ -26,7 +26,8 @@
       "type": "decimal"
     },
     "barcode": {
-      "type": "string"
+      "type": "string",
+      "unique": true
     },
     "notes": {
       "type": "text"
