@@ -37,6 +37,16 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
     
           // Extract the ID of the last created entry
           const lastCreatedId = lastEntry[0]?.number;
+          let parts = lastCreatedId.split('-');
+          let lastPart = parseInt(parts[parts.length - 1], 10) + 1;
+          let incrementedLastPart = lastPart.toString().padStart(2, '0');
+          parts[parts.length - 1] = incrementedLastPart;
+          let incrementedNumberString = parts.join('-');
+
+
+
+
+
        
         try {
             const createAppo = await strapi.entityService.create('api::appointment.appointment', {
@@ -48,11 +58,11 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
                     middleName,
                     lastName
                   }, phone, fromDate,address,
-                  number:(parseInt(lastCreatedId, 10) + 1).toString(),
+                  number:incrementedNumberString,
                    toDate,approved: false,deposit:0,appoBy:'Mobile User',
                 hide: false,}
             });
-            ctx.send({ message: 'Booking Created', createAppo,lastCreatedId });
+            ctx.send({ message: 'Booking Created', createAppo,incrementedNumberString });
         } catch (error) {
             return ctx.throw(400, error);
 
