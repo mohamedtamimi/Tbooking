@@ -1,0 +1,26 @@
+{
+  "kind": "singleType",
+  "collectionName": "main_settings_mobiles",
+  "info": {
+    "singularName": "main-settings-mobile",
+    "pluralName": "main-settings-mobiles",
+    "displayName": "MainSettingsMobile"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "booking": {
+      "type": "boolean",
+      "default": true
+    },
+    "isDark": {
+      "type": "boolean",
+      "default": false
+    },
+    "phone": {
+      "type": "string"
+    }
+  }
+}

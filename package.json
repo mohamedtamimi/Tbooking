@@ -11,12 +11,14 @@
     "strapi": "strapi"
   },
   "dependencies": {
+    "@strapi/plugin-content-manager": "^4.25.8",
     "@strapi/plugin-i18n": "4.12.0",
     "@strapi/plugin-users-permissions": "4.12.0",
     "@strapi/provider-email-sendgrid": "^4.20.5",
     "@strapi/strapi": "4.12.0",
     "luxon": "^3.4.2",
-    "mysql": "2.18.1"
+    "mysql": "2.18.1",
+    "sharp": "^0.33.5"
   },
   "author": {
     "name": "A Strapi developer"

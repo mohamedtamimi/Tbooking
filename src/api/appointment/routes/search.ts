@@ -1,9 +1,33 @@
 module.exports = {
     routes: [
         { // Path defined with a URL parameter
+            method: 'POST',
+            path: '/booking',
+            handler: 'appointment.booking',
+            config:{
+              auth:  false
+            }
+        },
+        { // Path defined with a URL parameter
             method: 'GET',
-            path: '/searchCustomers',
-            handler: 'appointment.searchCU',
+            path: '/servicesMobile',
+            handler: 'appointment.servicesMobile',
+            config:{
+              auth:  false
+            }
+        },
+        { // Path defined with a URL parameter
+            method: 'GET',
+            path: '/usersMobile',
+            handler: 'appointment.usersMobile',
+            config:{
+              auth:  false
+            }
+        },
+        { // Path defined with a URL parameter
+            method: 'GET',
+            path: '/publishedPosts',
+            handler: 'appointment.publishedPosts',
             config:{
               auth:  false
             }

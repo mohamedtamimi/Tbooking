@@ -1,7 +1,7 @@
 module.exports = {
     routes: [
         {
-            method: 'PATCH',
+            method: 'PUT',
             path: '/discountQTY/:id',
             handler: 'qty.updateStock',
             config:{

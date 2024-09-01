@@ -80,6 +80,16 @@
       "relation": "manyToMany",
       "target": "api::order.order",
       "mappedBy": "employees"
+    },
+    "privilege": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::privilege.privilege"
+    },
+    "isToday": {
+      "type": "boolean",
+      "default": false,
+      "required": false
     }
   }
 }

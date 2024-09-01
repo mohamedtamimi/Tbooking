@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "privileges",
+  "info": {
+    "singularName": "privilege",
+    "pluralName": "privileges",
+    "displayName": "privileges"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "role": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "pages": {
+      "type": "json",
+      "required": true
+    }
+  }
+}
