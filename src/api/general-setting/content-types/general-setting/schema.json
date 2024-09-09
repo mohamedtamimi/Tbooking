@@ -1,0 +1,28 @@
+{
+  "kind": "singleType",
+  "collectionName": "general_settings",
+  "info": {
+    "singularName": "general-setting",
+    "pluralName": "general-settings",
+    "displayName": "generalSetting",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "textColor": {
+      "type": "string",
+      "default": "#4e535a"
+    },
+    "primaryColor": {
+      "type": "string",
+      "default": "#4F7EEA"
+    },
+    "secondaryColor": {
+      "type": "string",
+      "default": "#797a7b"
+    }
+  }
+}
