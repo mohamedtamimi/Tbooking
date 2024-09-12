@@ -4,7 +4,8 @@
   "info": {
     "singularName": "currency",
     "pluralName": "currencies",
-    "displayName": "currency"
+    "displayName": "currency",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -14,6 +15,10 @@
     "code": {
       "type": "string",
       "default": "USD"
+    },
+    "name": {
+      "type": "string",
+      "default": "Dollar"
     }
   }
 }
