@@ -22,3 +22,5 @@ module.exports = createCoreController('api::mobile-ad.mobile-ad', ({ strapi }) =
 
 
 }));
+
+

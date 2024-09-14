@@ -32,6 +32,15 @@ module.exports = {
               auth:  false
             }
         },
+        {
+  "method": "GET",
+  "path": "/notfi",
+  "handler": "appointment.notfi",
+  "config": {
+    auth:  false,
+    "policies": []
+  }
+}
        
     ]
 }

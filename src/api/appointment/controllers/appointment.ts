@@ -54,7 +54,7 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
                     }, 
                     phone, fromDate, address, createBy: 'Mobile User',
                     number: incrementedNumberString,
-                    toDate, approved: false, deposit: 0, appoBy: 'Mobile User',
+                    toDate, approved: false, deposit: 0,
                     hide: false,
                 }
             });
@@ -127,5 +127,27 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
             ctx.throw(500, 'Unable to fetch the last created ID');
         }
     },
+    async notfi(ctx?) {
 
+            ctx.set('Content-Type', 'text/event-stream');
+            ctx.set('Cache-Control', 'no-cache');
+            ctx.set('Connection', 'keep-alive');
+        
+            // Send an initial event to the client
+        
+            // Example: Send periodic updates every 5 seconds
+
+                ctx.res.write(`data: Connection established\n\n`);
+
+           setInterval(() => {
+              const message = { message: `Hello! Current time: ${new Date().toLocaleTimeString()}` };
+              ctx.res.write(`data: ${JSON.stringify(message)}\n\n`,`type:message`);
+            }, 5000);
+
+            // Stop sending events when the connection is closed
+
+        
+       
+
+      },
 }));
