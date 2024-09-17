@@ -10,6 +10,22 @@ module.exports = {
         },
         { // Path defined with a URL parameter
             method: 'GET',
+            path: '/searchCU',
+            handler: 'appointment.searchCU',
+            config:{
+              auth:  false
+            }
+        },
+        { // Path defined with a URL parameter
+            method: 'GET',
+            path: '/searchOR',
+            handler: 'appointment.searchOR',
+            config:{
+              auth:  false
+            }
+        },
+        { // Path defined with a URL parameter
+            method: 'GET',
             path: '/servicesMobile',
             handler: 'appointment.servicesMobile',
             config:{

@@ -13,19 +13,31 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
 
             const entities = await strapi.entityService.findMany('api::appointment.appointment', {
                 populate: '*',
-                filters: {
-                    customer: {
-                        $or: [
-                            { firstName: { $containsi: search }, },
-                            { lastName: { $containsi: search } }
-                        ]
-                    }
-                }
 
-            });
-            ctx.send({ entities });
+            },);
+            let customer =entities.filter(x=>x.customer?.firstName ==search.search|| x.customer?.middleName ==search.search||x.customer?.lastName==search.search);    
+
+            ctx.send( {customer} );
         } catch (error) {
+ctx.throw(error)
+        }
+    },
+    async searchOR(ctx) {
+        try {
+            const search = ctx.request.query;
 
+            const entities = await strapi.entityService.findMany('api::order.order', {
+                populate: '*',
+
+            },);
+            // let customer
+            // entities.map(x=>{
+            //     customer  =x.appointment.find(x=>x.customer.firstName ==search.search|| x.customer.middleName ==search.search||x.customer.lastName==search.search);
+            // })
+            let customer =entities.filter(x=>x.appointment?.customer?.firstName ==search.search|| x.appointment?.customer?.middleName ==search.search||x.appointment?.customer?.lastName==search.search);    
+            ctx.send( {customer} );
+        } catch (error) {
+ctx.throw(error)
         }
     },
     async booking(ctx) {
@@ -127,27 +139,25 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
             ctx.throw(500, 'Unable to fetch the last created ID');
         }
     },
-    async notfi(ctx?) {
-
-            ctx.set('Content-Type', 'text/event-stream');
-            ctx.set('Cache-Control', 'no-cache');
-            ctx.set('Connection', 'keep-alive');
-        
-            // Send an initial event to the client
-        
-            // Example: Send periodic updates every 5 seconds
-
-                ctx.res.write(`data: Connection established\n\n`);
-
-           setInterval(() => {
-              const message = { message: `Hello! Current time: ${new Date().toLocaleTimeString()}` };
-              ctx.res.write(`data: ${JSON.stringify(message)}\n\n`,`type:message`);
-            }, 5000);
-
-            // Stop sending events when the connection is closed
-
-        
-       
-
+    async notfi(ctx) {
+        ctx.set('Content-Type', 'text/event-stream');
+        ctx.set('Cache-Control', 'no-cache');
+        ctx.set('Connection', 'keep-alive');
+    
+        // Send an initial event to the client
+        ctx.res.write(`data: Connection established\n\n`);
+    
+        // Example: Send periodic updates every 5 seconds
+        const intervalId = setInterval(() => {
+          const message = { message: `Hello! Current time: ${new Date().toLocaleTimeString()}` };
+          ctx.res.write(`data: ${JSON.stringify(message)}\n\n`);
+        }, 5000);
+    
+        // Stop sending events when the connection is closed
+        // ctx.req.on('close', () => {
+        //   clearInterval(intervalId);
+        //   ctx.res.end();
+        // });
       },
+      
 }));
