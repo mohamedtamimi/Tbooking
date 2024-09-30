@@ -11,6 +11,9 @@ const { DateTime } = require('luxon');
 
 module.exports = createCoreController('api::order.order', ({ strapi }) => ({
     async count(ctx) {
+        const productCounts: any = {};
+        const serviceCounts: any = {};
+
         try {
 
             const { startDate, endDate } = ctx.request.query;
@@ -20,14 +23,14 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
 
             const currentDate = DateTime.now().startOf('day').toJSDate();
             const currentEndDate = DateTime.now().endOf('day').toJSDate();
-            const bodycurrentDate=[currentDate,currentEndDate]
-            const selectedtDate=[startDateTime,endDateTime]
+            const bodycurrentDate = [currentDate, currentEndDate]
+            const selectedtDate = [startDateTime, endDateTime]
             const entities = await strapi.entityService.findMany('api::order.order', {
                 populate: '*',
                 filters: {
-                    createdAt: { $between: startDate?selectedtDate:bodycurrentDate},
-                      
-                    
+                    createdAt: { $between: startDate ? selectedtDate : bodycurrentDate },
+
+
                     status: { $ne: 'Canceled' }
                 }
             });
@@ -35,14 +38,47 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
             entities.forEach(entity => {
                 sum += entity.cash;
             });
+            entities?.forEach(request => {
+                request.products?.forEach(product => {
+                    const productName = product.name;
 
+                    // Step 2: Count Frequency or Sum Quantities
+                    if (!productCounts[productName]) {
+                        productCounts[productName] = { qty: 0, name: productName };
+                    }
+                    productCounts[productName].qty += product.qty;
+                });
+            });
+            const topProducts = Object.values(productCounts).sort((a: any, b: any) => b.qty - a.qty).slice(0, 5);
 
-
+            entities.forEach(request => {
+                if (request.employee && Array.isArray(request.employee)) {
+                    request.employee.forEach(emp => {
+                        if (emp.services && Array.isArray(emp.services)) {
+                            emp.services.forEach(service => {
+                                const serviceId = service.id;
+                                if (!serviceCounts[serviceId]) {
+                                    serviceCounts[serviceId] = {
+                                        count: 0,
+                                        ar: service.ar,
+                                        en: service.en,
+                                        price: service.price
+                                    };
+                                }
+                                serviceCounts[serviceId].count += 1;
+                                serviceCounts[serviceId].price += service.price;
+                            });
+                        }
+                    });
+                }
+            });
+            const topServices = Object.values(serviceCounts).sort((a: any, b: any) => b.count - a.count)
+                .slice(0, 5);
             const canceld = await strapi.entityService.findMany('api::order.order', {
                 populate: { someRelation: true },
                 filters: {
                     status: { $eq: 'Canceled' },
-                    hide:{$eq:false}
+                    hide: { $eq: false }
                 }
             });
             let canceldLenght = canceld.length
@@ -52,7 +88,7 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
                 populate: { someRelation: true },
                 filters: {
                     status: { $eq: 'Paid', },
-                    hide:{$eq:false}
+                    hide: { $eq: false }
                 }
             });
             let paidLenght = paid.length
@@ -61,7 +97,7 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
                 populate: { someRelation: true },
                 filters: {
                     status: { $eq: 'Unpaid' },
-                    hide:{$eq:false}
+                    hide: { $eq: false }
                 }
             });
             let unpaidLenght = unpaid.length
@@ -70,46 +106,46 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
                 populate: { someRelation: true },
                 filters: {
                     status: { $eq: 'Draft' },
-                    hide:{$eq:false}
+                    hide: { $eq: false }
                 }
             });
             let draftLenght = draft.length
 
 
 
-            ctx.send({ entities, sum, canceldLenght,paidLenght,unpaidLenght,draftLenght });
+            ctx.send({ entities, sum, canceldLenght, paidLenght, unpaidLenght, draftLenght, topProducts ,topServices});
         } catch (error) {
             console.error(error);
             return ctx.throw(500, 'Internal Server Error');
         }
     },
-    async searchs(ctx){
+    async searchs(ctx) {
         try {
             const search = ctx.request.query;
 
             const entities = await strapi.entityService.findMany('api::order.order', {
                 populate: '*',
                 filters: {
-                   
-                      
-                    
+
+
+
                     "appointment.customer": {
                         $or: [
-                          {  firstName: { $containsi: search },},
-                           { lastName: { $containsi: search }}
+                            { firstName: { $containsi: search }, },
+                            { lastName: { $containsi: search } }
                         ]
-                      }
+                    }
                 }
-               
+
             });
-            ctx.send({entities});
+            ctx.send({ entities });
         } catch (error) {
-            
+
         }
     },
-    async phoneNumbers(ctx){
+    async phoneNumbers(ctx) {
         const uniquePhones = {}; // This object will help track unique phone numbers
-const phones = [];
+        const phones = [];
         try {
             const entities = await strapi.entityService.findMany('api::order.order', {
                 populate: '*',
@@ -118,19 +154,58 @@ const phones = [];
                 }
             });
             entities.forEach(entity => {
-                const customer =entity.appointment.customer.firstName +' '+ entity.appointment.customer.middleName +' '+ entity.appointment.customer.lastName
+                const customer = entity.appointment.customer.firstName + ' ' + entity.appointment.customer.middleName + ' ' + entity.appointment.customer.lastName
                 const phoneNumber = entity.appointment.phone;
 
                 if (!uniquePhones[phoneNumber] && phoneNumber) {
-                    uniquePhones[phoneNumber] = true; 
+                    uniquePhones[phoneNumber] = true;
                     phones.push({ phone: phoneNumber, customer });
-                  }
+                }
             });
-            ctx.send({phones});
+            ctx.send({ phones });
         } catch (error) {
-            
+
         }
     },
+    async getLastNumberOrder(ctx){
+        const lastEntry = await strapi.db.query('api::order.order').findMany({
+            orderBy: { createdAt: 'desc' },
+            limit: 1,
+        });
 
+        const lastCreatedId = lastEntry[0]?.orderNo;
+        let parts = lastCreatedId.split('-');
+        let lastParts = parseInt(parts[parts.length - 1], 10) + 1;
+        let incrementedLastPart = lastParts.toString().padStart(2, '0');
+        parts[parts.length - 1] = incrementedLastPart;
+        let incrementedNumberString = parts.join('-');
+        // Get today's date
+        const today = new Date();
+        const currentDay = today.getDate();
+        const currentMonth = today.getMonth() + 1; // Months are 0-indexed, so add 1
+        const currentYear = today.getFullYear().toString().slice(-2); // Get last two digits of the year
+    
+        // Split the previous date part
+        let [day, month, year, lastPart] = incrementedNumberString.split('-').map(Number);
+    
+        // Check if we need to reset to the next day
+        if (currentDay !== day || currentMonth !== month) {
+          // Reset increment to 0 and update the day and month
+          lastPart='00'
+          day = currentDay; // Update to today's day
+          month = currentMonth; // Update to today's month
+          year = currentYear; // Update to today's month
+        } else {
+          // Increment the last part for the same day
+          lastPart = (lastPart + 0).toString().padStart(2, '0');
+        }
+    
+    
+        // Create the new date string
+        const newNumber = `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year.toString().padStart(2, '0')}-${lastPart}`;
+        // Send the updated value as the response
+        ctx.send({ newNumber });
+      
+    }
 
 }));

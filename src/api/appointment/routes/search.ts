@@ -48,6 +48,40 @@ module.exports = {
               auth:  false
             }
         },
+        { // Path defined with a URL parameter
+            method: 'GET',
+            path: '/getLastNumber',
+            handler: 'appointment.getLastNumber',
+            config:{
+              auth:  false
+            }
+        },
+        { // Path defined with a URL parameter
+            method: 'GET',
+            path: '/convertDraftToCancel',
+            handler: 'appointment.convertDraftToCancel',
+            config:{
+              auth:  false
+            }
+        },
+        { // Path defined with a URL parameter
+          method: 'GET',
+          path: '/deleteUnapproved',
+          handler: 'appointment.deleteUnapproved',
+          config:{
+            auth:  false
+          }
+      },
+      {
+        "method": "GET",
+        "path": "/sse",
+        "handler": "appointment.sse",
+        "config": {
+          auth:  false,
+
+          "policies": []
+        }
+      },
         {
   "method": "GET",
   "path": "/notfi",

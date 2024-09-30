@@ -8,6 +8,7 @@ module.exports = {
               auth:  false
             }
         },
+       
         { // Path defined with a URL parameter
             method: 'GET',
             path: '/numbers',
@@ -20,6 +21,14 @@ module.exports = {
             method: 'GET',
             path: '/searchCustomer',
             handler: 'order.searchs',
+            config:{
+              auth:  false
+            }
+        },
+        { // Path defined with a URL parameter
+            method: 'GET',
+            path: '/getLastNumberOrder',
+            handler: 'order.getLastNumberOrder',
             config:{
               auth:  false
             }
