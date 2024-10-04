@@ -83,8 +83,9 @@
     },
     "privilege": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::privilege.privilege"
+      "relation": "manyToOne",
+      "target": "api::privilege.privilege",
+      "inversedBy": "users"
     },
     "isToday": {
       "type": "boolean",
