@@ -113,12 +113,136 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
 
 
 
-            ctx.send({ entities, sum, canceldLenght, paidLenght, unpaidLenght, draftLenght, topProducts ,topServices});
+            ctx.send({ entities, sum, canceldLenght, paidLenght, unpaidLenght, draftLenght, topProducts, topServices });
         } catch (error) {
             console.error(error);
             return ctx.throw(500, 'Internal Server Error');
         }
     },
+    async productInfo(ctx) {
+        const { startDate, endDate } = ctx.request.query;
+        const startDateTime = DateTime.fromISO(startDate).startOf('day').toJSDate();
+        const endDateTime = DateTime.fromISO(endDate).endOf('day').toJSDate();
+
+        const currentDate = DateTime.now().startOf('day').toJSDate();
+        const currentEndDate = DateTime.now().endOf('day').toJSDate();
+        const bodycurrentDate = [currentDate, currentEndDate]
+        const selectedtDate = [startDateTime, endDateTime]
+        let products = []
+        const entities = await strapi.entityService.findMany('api::order.order', {
+            populate: '*',
+            limit: -1,
+            filters: {
+                createdAt: { $between: startDate ? selectedtDate : bodycurrentDate },
+
+
+                status: { $ne: 'Canceled' }
+            }
+        });
+        try {
+            const productId = ctx.params.id
+
+            let totalQty = 0;
+            let totalRevenue = 0;
+
+            entities.forEach(request => {
+                const products = request.products;
+                if (Array.isArray(products)) {
+                    products.forEach(product => {
+                        if (product.id == parseInt(productId)) {
+                            const qty = typeof product.qty === 'number' ? product.qty : 0;
+                            const price = typeof product.price === 'number' ? product.price : 0;
+                            totalQty += qty;
+                            totalRevenue += qty * price;
+                        }
+                    });
+                }
+            });
+            ctx.send({ totalQty, totalRevenue, entities })
+        } catch (error) {
+            ctx.throw(error)
+        }
+    },
+    //  async findMostActivePeriods(ctx) {
+    //     const events = [];
+    //     const { startDate, endDate } = ctx.request.query;
+
+    //     const startDateTime = DateTime.fromISO(startDate).startOf('day').toJSDate();
+    //     const endDateTime = DateTime.fromISO(endDate).endOf('day').toJSDate();
+
+    //     const currentDate = DateTime.now().startOf('day').toJSDate();
+    //     const currentEndDate = DateTime.now().endOf('day').toJSDate();
+    //     const bodycurrentDate = [currentDate, currentEndDate]
+    //     const selectedtDate = [startDateTime, endDateTime]
+    //     const entities = await strapi.entityService.findMany('api::order.order', {
+    //         populate: '*',
+    //         filters: {
+    //             createdAt: { $between: startDate ? selectedtDate : bodycurrentDate },
+
+
+    //             status: { $ne: 'Canceled' }
+    //         }
+    //     });
+    //     // Step 1: Create start and end events for each request
+    //     entities.forEach(request => {
+    //       const { fromDate, toDate } = request.appointment          ;
+
+    //       // Parse the dates
+    //       const start = new Date(fromDate);
+    //       const end = new Date(toDate);
+
+    //       // Push start and end events
+    //       events.push({ date: start, type: 'start' });
+    //       events.push({ date: end, type: 'end' });
+    //     });
+
+    //     // Step 2: Sort events
+    //     events.sort((a, b) => {
+    //       if (a.date < b.date) return -1;
+    //       if (a.date > b.date) return 1;
+    //       // If dates are equal, prioritize 'start' over 'end'
+    //       if (a.type === 'start' && b.type === 'end') return -1;
+    //       if (a.type === 'end' && b.type === 'start') return 1;
+    //       return 0;
+    //     });
+
+    //     // Step 3: Sweep through events to find maximum overlap
+    //     let currentActive = 0;
+    //     let maxActive = 0;
+    //     let periods = [];
+    //     let periodStart = null;
+
+    //     events.forEach(event => {
+    //       if (event.type === 'start') {
+    //         currentActive += 1;
+    //         if (currentActive > maxActive) {
+    //           // New maximum found, reset periods
+    //           maxActive = currentActive;
+    //           periods = [];
+    //           periodStart = event.date;
+    //         } else if (currentActive === maxActive) {
+    //           // Start of a new period with maxActive
+    //           periodStart = event.date;
+    //         }
+    //       } else if (event.type === 'end') {
+    //         if (currentActive === maxActive && periodStart) {
+    //           // End of a maxActive period
+    //           periods.push({ start: periodStart, end: event.date });
+    //           periodStart = null;
+    //         }
+    //         currentActive -= 1;
+    //       }
+    //     });
+
+    //     return {
+    //       maxActive,
+    //       periods: periods.map(p => ({
+    //         start: p.start.toISOString(),
+    //         end: p.end.toISOString(),
+    //         durationInDays: Math.ceil((p.end - p.start) / (1000 * 60 * 60 * 24))
+    //       }))
+    //     };
+    //   },
     async searchs(ctx) {
         try {
             const search = ctx.request.query;
@@ -167,7 +291,7 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
 
         }
     },
-    async getLastNumberOrder(ctx){
+    async getLastNumberOrder(ctx) {
         const lastEntry = await strapi.db.query('api::order.order').findMany({
             orderBy: { createdAt: 'desc' },
             limit: 1,
@@ -184,28 +308,28 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
         const currentDay = today.getDate();
         const currentMonth = today.getMonth() + 1; // Months are 0-indexed, so add 1
         const currentYear = today.getFullYear().toString().slice(-2); // Get last two digits of the year
-    
+
         // Split the previous date part
         let [day, month, year, lastPart] = incrementedNumberString.split('-').map(Number);
-    
+
         // Check if we need to reset to the next day
         if (currentDay !== day || currentMonth !== month) {
-          // Reset increment to 0 and update the day and month
-          lastPart='00'
-          day = currentDay; // Update to today's day
-          month = currentMonth; // Update to today's month
-          year = currentYear; // Update to today's month
+            // Reset increment to 0 and update the day and month
+            lastPart = '00'
+            day = currentDay; // Update to today's day
+            month = currentMonth; // Update to today's month
+            year = currentYear; // Update to today's month
         } else {
-          // Increment the last part for the same day
-          lastPart = (lastPart + 0).toString().padStart(2, '0');
+            // Increment the last part for the same day
+            lastPart = (lastPart + 0).toString().padStart(2, '0');
         }
-    
-    
+
+
         // Create the new date string
         const newNumber = `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year.toString().padStart(2, '0')}-${lastPart}`;
         // Send the updated value as the response
         ctx.send({ newNumber });
-      
+
     }
 
 }));

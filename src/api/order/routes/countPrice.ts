@@ -27,6 +27,14 @@ module.exports = {
         },
         { // Path defined with a URL parameter
             method: 'GET',
+            path: '/productInfo/:id',
+            handler: 'order.productInfo',
+            config:{
+              auth:  false
+            }
+        },
+        { // Path defined with a URL parameter
+            method: 'GET',
             path: '/getLastNumberOrder',
             handler: 'order.getLastNumberOrder',
             config:{

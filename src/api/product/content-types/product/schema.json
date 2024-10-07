@@ -44,9 +44,6 @@
       "type": "boolean",
       "default": false
     },
-    "dateExpire": {
-      "type": "date"
-    },
     "supplierContact": {
       "type": "string"
     }
