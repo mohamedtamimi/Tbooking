@@ -38,15 +38,17 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
             entities.forEach(entity => {
                 sum += entity.cash;
             });
+            
             entities?.forEach(request => {
                 request.products?.forEach(product => {
                     const productName = product.name;
 
                     // Step 2: Count Frequency or Sum Quantities
                     if (!productCounts[productName]) {
-                        productCounts[productName] = { qty: 0, name: productName };
+                        productCounts[productName] = { qty: 0, name: productName,price:0 };
                     }
                     productCounts[productName].qty += product.qty;
+                    productCounts[productName].price += product.qty*product.price;
                 });
             });
             const topProducts = Object.values(productCounts).sort((a: any, b: any) => b.qty - a.qty).slice(0, 5);
@@ -128,9 +130,8 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
         const currentEndDate = DateTime.now().endOf('day').toJSDate();
         const bodycurrentDate = [currentDate, currentEndDate]
         const selectedtDate = [startDateTime, endDateTime]
-        let products = []
+        let allproducts = []
         const entities = await strapi.entityService.findMany('api::order.order', {
-            populate: '*',
             limit: -1,
             filters: {
                 createdAt: { $between: startDate ? selectedtDate : bodycurrentDate },
@@ -154,11 +155,12 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
                             const price = typeof product.price === 'number' ? product.price : 0;
                             totalQty += qty;
                             totalRevenue += qty * price;
+                            allproducts.push(request)
                         }
                     });
                 }
             });
-            ctx.send({ totalQty, totalRevenue, entities })
+            ctx.send({ totalQty, totalRevenue, allproducts })
         } catch (error) {
             ctx.throw(error)
         }
