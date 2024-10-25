@@ -44,8 +44,11 @@
       "type": "boolean",
       "default": false
     },
-    "supplierContact": {
-      "type": "string"
+    "suppliers": {
+      "type": "json"
+    },
+    "details": {
+      "type": "json"
     }
   }
 }

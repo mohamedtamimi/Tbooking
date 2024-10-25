@@ -76,7 +76,10 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
 
             const entities = await strapi.entityService.findMany('api::order.order', {
                 populate: '*',
-
+                pagination: {
+                         // Page number
+                    pageSize: 10 // Items per page
+                },
             },);
             // let customer
             // entities.map(x=>{

@@ -132,6 +132,7 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
         const selectedtDate = [startDateTime, endDateTime]
         let allproducts = []
         const entities = await strapi.entityService.findMany('api::order.order', {
+            populate: '*',
             limit: -1,
             filters: {
                 createdAt: { $between: startDate ? selectedtDate : bodycurrentDate },
