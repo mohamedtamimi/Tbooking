@@ -49,6 +49,9 @@
     },
     "details": {
       "type": "json"
+    },
+    "category": {
+      "type": "json"
     }
   }
 }
