@@ -52,6 +52,9 @@
     },
     "category": {
       "type": "json"
+    },
+    "deletedBy": {
+      "type": "string"
     }
   }
 }
