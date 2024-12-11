@@ -4,6 +4,8 @@
 'use strict';
 import { factories } from '@strapi/strapi'
 const { createCoreController } = require('@strapi/strapi').factories;
+const { sendNotification } = require('C:/Work/strapi/Tbooking/src/services/onesignal.ts');
+
 // const { sanitizeEntity } = require('strapi-utils');
 
 let eventSource;
@@ -91,6 +93,7 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
             ctx.throw(error)
         }
     },
+    
     async booking(ctx) {
         const { firstName, middleName, lastName, phone, fromDate, toDate, address, number, employee } = ctx.request.body;
         const lastEntry = await strapi.db.query('api::appointment.appointment').findMany({
@@ -144,7 +147,8 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
                     hide: false,
                 }
             });
-            
+            await sendNotification('Your appointment has been successfully created.');
+
             // if (eventSource) {
             //     const sanitizedEntity = sanitizeEntity(createAppo, { model: strapi.models['api::appointment.appointment'] });
             //     eventSource.send(`data: ${JSON.stringify(sanitizedEntity)}\n\n`);

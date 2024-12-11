@@ -16,6 +16,7 @@ module.exports = {
               auth:  false
             }
         },
+        
         { // Path defined with a URL parameter
             method: 'GET',
             path: '/searchOR',
