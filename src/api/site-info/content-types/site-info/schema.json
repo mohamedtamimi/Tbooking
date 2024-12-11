@@ -4,7 +4,8 @@
   "info": {
     "singularName": "site-info",
     "pluralName": "site-infos",
-    "displayName": "siteInfo"
+    "displayName": "orderPic",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false

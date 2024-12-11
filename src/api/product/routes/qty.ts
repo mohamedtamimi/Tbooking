@@ -9,6 +9,14 @@ module.exports = {
               "policies": []
             }
         },
+        { // Path defined with a URL parameter
+            method: 'POST',
+            path: '/applayCatProducts',
+            handler: 'product.applayCatProducts',
+            config:{
+              auth:  false
+            }
+        },
         
     ]
 }
