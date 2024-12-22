@@ -4,7 +4,6 @@
 'use strict';
 import { factories } from '@strapi/strapi'
 const { createCoreController } = require('@strapi/strapi').factories;
-const { sendNotification } = require('C:/Work/strapi/Tbooking/src/services/onesignal.ts');
 
 // const { sanitizeEntity } = require('strapi-utils');
 
@@ -147,7 +146,6 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
                     hide: false,
                 }
             });
-            await sendNotification('Your appointment has been successfully created.');
 
             // if (eventSource) {
             //     const sanitizedEntity = sanitizeEntity(createAppo, { model: strapi.models['api::appointment.appointment'] });
