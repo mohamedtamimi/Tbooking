@@ -36,11 +36,11 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
             });
             let sum = 0;
             entities.forEach(entity => {
-                sum += entity.cash;
+                sum += (entity.cash + entity.appointment.deposit);
             });
             
-            entities?.forEach(request => {
-                request.products?.forEach(product => {
+            entities?.forEach(request => {                
+                request.appointment.products?.forEach(product => {
                     const productName = product.name;
 
                     // Step 2: Count Frequency or Sum Quantities
@@ -54,8 +54,8 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
             const topProducts = Object.values(productCounts).sort((a: any, b: any) => b.qty - a.qty).slice(0, 5);
 
             entities.forEach(request => {
-                if (request.employee && Array.isArray(request.employee)) {
-                    request.employee.forEach(emp => {
+                if (request.appointment.employee && Array.isArray(request.appointment.employee)) {
+                    request.appointment.employee.forEach(emp => {
                         if (emp.services && Array.isArray(emp.services)) {
                             emp.services.forEach(service => {
                                 const serviceId = service.id;

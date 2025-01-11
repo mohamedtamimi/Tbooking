@@ -75,12 +75,6 @@
       "type": "boolean",
       "default": false
     },
-    "orders": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::order.order",
-      "mappedBy": "employees"
-    },
     "privilege": {
       "type": "relation",
       "relation": "manyToOne",

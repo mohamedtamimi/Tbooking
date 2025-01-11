@@ -52,22 +52,10 @@
         "percent"
       ]
     },
-    "products": {
-      "type": "json"
-    },
     "pay_by": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::pay-by.pay-by"
-    },
-    "employee": {
-      "type": "json"
-    },
-    "employees": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "orders"
     }
   }
 }
