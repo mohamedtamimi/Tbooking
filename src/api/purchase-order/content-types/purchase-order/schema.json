@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "purchase_orders",
+  "info": {
+    "singularName": "purchase-order",
+    "pluralName": "purchase-orders",
+    "displayName": "purchaseOrder",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "no": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Draft",
+        "Paid",
+        "Unpaid",
+        "Canceled"
+      ],
+      "default": "Draft"
+    },
+    "cash": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "vendor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::vendor.vendor",
+      "inversedBy": "purchase_orders"
+    },
+    "products": {
+      "type": "json",
+      "required": true
+    },
+    "payments": {
+      "type": "json"
+    },
+    "createBy": {
+      "type": "json",
+      "required": true
+    },
+    "addedToStuck": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "pic": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}

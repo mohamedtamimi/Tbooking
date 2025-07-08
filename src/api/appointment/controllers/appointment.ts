@@ -101,12 +101,17 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
         });
 
         // Extract the ID of the last created entry
-        const lastCreatedId = lastEntry[0]?.number;
-        let parts = lastCreatedId.split('-');
-        let lastParts = parseInt(parts[parts.length - 1], 10) + 1;
-        let incrementedLastPart = lastParts.toString().padStart(2, '0');
-        parts[parts.length - 1] = incrementedLastPart;
-        let incrementedNumberString = parts.join('-');
+        if (lastEntry.length) {
+            const lastCreatedId = lastEntry[0]?.number;
+            let parts = lastCreatedId.split('-');
+            let lastParts = parseInt(parts[parts.length - 1], 10) + 1;
+            let incrementedLastPart = lastParts.toString().padStart(2, '0');
+            parts[parts.length - 1] = incrementedLastPart;
+            var incrementedNumberString = parts.join('-');
+        }else{
+            // If no entries exist, start with the first number
+            var incrementedNumberString:any = '01-01-23-00';
+        }
         // Get today's date
         const today = new Date();
         const currentDay = today.getDate();
@@ -203,23 +208,6 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
         } catch (error) {
             console.error(error);
             return ctx.throw(500, 'Internal Server Error');
-        }
-    },
-    async getLastCreatedId(ctx) {
-        try {
-            // Query the database to get the last created entry sorted by 'createdAt'
-            const lastEntry = await strapi.db.query('api::your-collection.your-collection').findMany({
-                orderBy: { createdAt: 'desc' },
-                limit: 1,
-            });
-
-            // Extract the ID of the last created entry
-            const lastCreatedId = lastEntry[0]?.id;
-
-            // Return the ID in the response
-            ctx.send({ lastCreatedId });
-        } catch (error) {
-            ctx.throw(500, 'Unable to fetch the last created ID');
         }
     },
     async notfi(ctx) {

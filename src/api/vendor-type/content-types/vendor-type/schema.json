@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vendor_types",
+  "info": {
+    "singularName": "vendor-type",
+    "pluralName": "vendor-types",
+    "displayName": "vendorType"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "hide": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    }
+  }
+}

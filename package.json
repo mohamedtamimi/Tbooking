@@ -21,7 +21,10 @@
     "luxon": "^3.4.2",
     "mysql": "2.18.1",
     "npm": "^6.0.0",
-    "sharp": "^0.33.5"
+    "openai": "^5.8.2",
+    "sharp": "^0.33.5",
+    "strapi-chatgpt": "^1.0.2",
+    "strapi-provider-email-extra": "^0.5.0"
   },
   "author": {
     "name": "A Strapi developer"

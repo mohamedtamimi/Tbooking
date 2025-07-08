@@ -22,8 +22,9 @@
       "type": "integer",
       "min": 0
     },
-    "buyPrice": {
-      "type": "decimal"
+    "sellPrice": {
+      "type": "decimal",
+      "min": 0
     },
     "barcode": {
       "type": "string",

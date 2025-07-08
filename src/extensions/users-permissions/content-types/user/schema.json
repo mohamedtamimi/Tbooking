@@ -85,6 +85,15 @@
       "type": "boolean",
       "default": false,
       "required": false
+    },
+    "gender": {
+      "type": "enumeration",
+      "enum": [
+        "Male",
+        "Female"
+      ],
+      "default": "Male",
+      "required": true
     }
   }
 }
