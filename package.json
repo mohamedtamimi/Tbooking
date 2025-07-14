@@ -18,6 +18,7 @@
     "@strapi/strapi": "4.12.0",
     "@strapi/utils": "^5.0.1",
     "axios": "^1.7.9",
+    "bcryptjs": "^3.0.2",
     "dayjs": "^1.11.13",
     "exceljs": "^4.4.0",
     "luxon": "^3.4.2",
@@ -25,7 +26,6 @@
     "npm": "^6.0.0",
     "openai": "^5.8.2",
     "sharp": "^0.33.5",
-    "strapi-chatgpt": "^1.0.2",
     "strapi-provider-email-extra": "^0.5.0"
   },
   "author": {

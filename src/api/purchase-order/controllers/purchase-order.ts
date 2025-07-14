@@ -9,7 +9,7 @@ const { createCoreController } = require('@strapi/strapi').factories;
 module.exports = createCoreController('api::purchase-order.purchase-order', ({ strapi }) => ({
 
   async createPO(ctx) {
-    const { vendor, cash, status, payments, products, createBy, addedToStuck } = ctx.request.body;
+    const { vendor, cash, status, payments, products, createBy, addedToStuck,pic } = ctx.request.body;
     const lastEntry = await strapi.db.query('api::purchase-order.purchase-order').findMany({
       orderBy: { createdAt: 'desc' },
       limit: 1,
@@ -60,6 +60,7 @@ module.exports = createCoreController('api::purchase-order.purchase-order', ({ s
           products,
           createBy,
           addedToStuck,
+          pic
         }
       });
 

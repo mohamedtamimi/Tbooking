@@ -3,7 +3,7 @@
 import dayjs from "dayjs";
 
 const ExcelJS = require('exceljs');
-
+const bcrypt = require('bcryptjs');
 function getValueFromPath(obj, path) {
   // Handle custom virtual fields
   if (path === 'appointment.customer.fullName') {
@@ -20,7 +20,7 @@ function getValueFromPath(obj, path) {
     return payments
       .map(p => {
         const name = p.by || 'Unknown';
-        const amount = p.pay ?? '';
+        const amount = p.pay ?? '0';
         return `${name} (${amount})`;
       })
       .join(' + ');
@@ -30,7 +30,7 @@ function getValueFromPath(obj, path) {
     const toDate = obj?.toDate;
     if (!fromDate || !toDate) return '';
     return `${dayjs(fromDate).format('YYYY-MM-DD hh:mm')} --> ${dayjs(toDate).format('YYYY-MM-DD hh:mm')}`;
-   
+
   }
   if (path === 'products.sell') {
     const products = obj?.products;
@@ -38,7 +38,7 @@ function getValueFromPath(obj, path) {
     return products
       .map(p => {
         const name = p.name || 'Unknown';
-        const sellPrice = p.sellPrice ?? '';
+        const sellPrice = p.sellPrice ??'0';
         return `${name} (${sellPrice})`;
       })
       .join(' + ');
@@ -49,21 +49,21 @@ function getValueFromPath(obj, path) {
     return products
       .map(p => {
         const name = p.name || 'Unknown';
-        const price = p.price ?? '';
+        const price = p.price ?? '0';
         return `${name} (${price})`;
       })
       .join(' + ');
   }
-if (path === 'employees.services') {
-  const employees = obj?.employee;
-  if (!Array.isArray(employees)) return '';
+  if (path === 'employees.services') {
+    const employees = obj?.employee;
+    if (!Array.isArray(employees)) return '';
 
-  return employees.map(emp => {
-    const name = emp.username || 'Unknown';
-    const services = emp.services?.map(s => `${s.en} (${s.price})`).join(', ') || '';
-    return `${name}: ${services}`;
-  }).join(' // ');
-}
+    return employees.map(emp => {
+      const name = emp.username || 'Unknown';
+      const services = emp.services?.map(s => `${s.en} (${s.price})`).join(', ') || '';
+      return `${name}: ${services}`;
+    }).join(' // ');
+  }
   // Generic nested access (safe for any path)
   return path.split('.').reduce((o, k) => (o ? o[k] : ''), obj);
 }
@@ -91,7 +91,7 @@ function extractPopulatePaths(columns) {
 
 module.exports = {
   async exportData(ctx) {
-    const { columns, collection } = ctx.request.body;
+    const { columns, collection, password } = ctx.request.body;
 
     if (!columns || !Array.isArray(columns)) {
       return ctx.badRequest('Missing columns');
@@ -100,19 +100,35 @@ module.exports = {
     if (!collection || typeof collection !== 'string') {
       return ctx.badRequest('Missing or invalid collection');
     }
+    if (!ctx.state.user) {
+      return ctx.unauthorized('You must be logged in');
+    }
 
+    if (!password) {
+      return ctx.badRequest('Password is required');
+    }
     const uid = `api::${collection}.${collection}`;
     const model = strapi.contentTypes[uid];
 
     if (!model) {
       return ctx.badRequest(`Collection '${collection}' not found.`);
     }
+    const user = await strapi.entityService.findOne('plugin::users-permissions.user', ctx.state.user.id, {
+      fields: ['password']
+    });
+
+    // Compare entered password with hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return ctx.send({ message: 'Incorrect password' }, 401);
+    }
     const populate = extractPopulatePaths(columns);
 
     const data = await strapi.entityService.findMany(uid, {
       populate,
-      filters: {hide: { $eq: false }},
-     
+      filters: { hide: { $eq: false } },
+
     });
 
     const workbook = new ExcelJS.Workbook();
