@@ -60,7 +60,8 @@ module.exports = createCoreController('api::purchase-order.purchase-order', ({ s
           products,
           createBy,
           addedToStuck,
-          pic
+          pic,
+          hide:false
         }
       });
 

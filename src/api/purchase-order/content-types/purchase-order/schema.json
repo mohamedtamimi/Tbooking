@@ -61,6 +61,19 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "hide": {
+      "type": "boolean",
+      "default": false
+    },
+    "cancellationNote": {
+      "type": "string"
+    },
+    "canceledAt": {
+      "type": "datetime"
+    },
+    "canceledBy": {
+      "type": "json"
     }
   }
 }
