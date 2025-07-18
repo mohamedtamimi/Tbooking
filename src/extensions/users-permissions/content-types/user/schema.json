@@ -94,6 +94,9 @@
       ],
       "default": "Male",
       "required": true
+    },
+    "expoPushToken": {
+      "type": "string"
     }
   }
 }
