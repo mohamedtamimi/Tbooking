@@ -7,7 +7,8 @@ export default [
   {
     name: 'strapi::cors',
     config: {
-      origin: ['http://mohamedtamimi-001-site12.ktempurl.com'], // ضف موقعك هنا
+      // origin: ['http://mohamedtamimi-001-site12.ktempurl.com', 'http://localhost:4200'],
+      origin: ['*'], // ضف موقعك هنا
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       headers: '*',
       credentials: true
