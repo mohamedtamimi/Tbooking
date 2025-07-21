@@ -15,7 +15,7 @@ export default [
     },
   },
   "strapi::security",
-  "strapi::cors",
+  // "strapi::cors",
   "strapi::poweredBy",
   "strapi::logger",
   "strapi::query",

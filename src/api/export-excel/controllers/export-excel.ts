@@ -43,6 +43,17 @@ function getValueFromPath(obj, path) {
       })
       .join(' + ');
   }
+  if (path === 'products.qty') {
+    const products = obj?.products;
+    if (!Array.isArray(products)) return '';
+    return products
+      .map(p => {
+        const name = p.name || 'Unknown';
+        const qty = p.qty ??'0';
+        return `${name} (${qty})`;
+      })
+      .join(' + ');
+  }
   if (path === 'products.list') {
     const products = obj?.products;
     if (!Array.isArray(products)) return '';
@@ -64,7 +75,6 @@ function getValueFromPath(obj, path) {
       return `${name}: ${services}`;
     }).join(' // ');
   }
-  // Generic nested access (safe for any path)
   return path.split('.').reduce((o, k) => (o ? o[k] : ''), obj);
 }
 function extractPopulatePaths(columns) {
