@@ -74,6 +74,9 @@
     },
     "createBy": {
       "type": "string"
+    },
+    "expoPushToken": {
+      "type": "string"
     }
   }
 }
