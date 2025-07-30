@@ -290,5 +290,6 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
                 eventSource.send(`data: ${JSON.stringify('test')}\n\n`);
 
       },
+      
 
 }));

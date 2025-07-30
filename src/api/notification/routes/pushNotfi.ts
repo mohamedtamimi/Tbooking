@@ -1,10 +1,15 @@
-export default [
-  {
-    method: 'POST',
-    path: '/send-notification',
-    handler: 'pushNotfi.sendNotification',
-    config: {
-      auth: false, // or true if you want to protect this route
+'use strict';
+
+module.exports = {
+  routes: [
+    {
+      method: 'POST',
+      path: '/send-notification',
+      handler: 'pushNotfi.sendPush',
+      config: {
+        policies: [],
+        auth: false, // optional: turn on if needed
+      },
     },
-  },
-];
+  ],
+};
