@@ -1,29 +1,27 @@
-import { Strapi } from '@strapi/strapi';
 
-interface NotificationPayload {
-  to: string[];        // Array of Expo push tokens or FCM tokens
-  title: string;
-  body: string;
-  data?: Record<string, any>;
-}
+const axios = require('axios');
 
-export default ({ strapi }: { strapi: Strapi }) => ({
-  async sendNotification(ctx) {
-    const { to, title, body, data } = ctx.request.body as NotificationPayload;
+module.exports = {
+  async sendPush(ctx) {
+    const { token, title, body } = ctx.request.body;
 
-    if (!to || !title || !body) {
-      ctx.throw(400, 'Missing required fields: to, title, or body');
-    }
+    const response = await axios.post(
+      'https://fcm.googleapis.com/fcm/send',
+      {
+        to: token,
+        notification: {
+          title,
+          body
+        }
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'key=AIzaSyADxm4RsbTsIUl6k9vIT61lk28bbchBqh4'
+        }
+      }
+    );
 
-    try {
-      await strapi
-        .plugin('expo-notifications')
-        .service('send')
-        .sendNotification({ to, title, body, data });
-
-      ctx.send({ message: 'Notification sent successfully' });
-    } catch (error) {
-      ctx.throw(500, `Failed to send notification: ${error.message}`);
-    }
-  },
-});
+    ctx.send(response.data);
+  }
+};
