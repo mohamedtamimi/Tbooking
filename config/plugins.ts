@@ -12,12 +12,7 @@ module.exports = ({ env }) => ({
         },
       },
     },
-    'expo-notifications': {
-    enabled: true,
-    config: {
-      expoAppToken: 'mzBQHHKyTi0TPJoza_0H0R3E-2FdsWtCnTEONiIi', // leave empty if you’re using personal Expo push tokens
-    },
-  },
+   
     
     
   });
