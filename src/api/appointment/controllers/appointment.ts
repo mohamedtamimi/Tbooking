@@ -240,13 +240,17 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
             orderBy: { createdAt: 'desc' },
             limit: 1,
         });
-
+ if (lastEntry.length) {
         const lastCreatedId = lastEntry[0]?.number;
         let parts = lastCreatedId.split('-');
         let lastParts = parseInt(parts[parts.length - 1], 10) + 1;
         let incrementedLastPart = lastParts.toString().padStart(2, '0');
         parts[parts.length - 1] = incrementedLastPart;
-        let incrementedNumberString = parts.join('-');
+        var incrementedNumberString = parts.join('-');
+ }else{
+        // If no entries exist, start with the first number
+        var incrementedNumberString:any = '01-01-23-00';
+ }
         // Get today's date
         const today = new Date();
         const currentDay = today.getDate();

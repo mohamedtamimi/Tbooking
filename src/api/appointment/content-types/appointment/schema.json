@@ -53,9 +53,6 @@
     "deletedBy": {
       "type": "string"
     },
-    "appoBy": {
-      "type": "string"
-    },
     "status": {
       "type": "enumeration",
       "enum": [
@@ -72,11 +69,14 @@
     "employee": {
       "type": "json"
     },
-    "createBy": {
-      "type": "string"
-    },
     "expoPushToken": {
       "type": "string"
+    },
+    "createBy": {
+      "type": "json"
+    },
+    "appoBy": {
+      "type": "json"
     }
   }
 }

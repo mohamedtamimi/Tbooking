@@ -328,7 +328,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
     });
 
     if (lastEntry.length) {
-      const lastCreatedId = lastEntry[0]?.number;
+      const lastCreatedId = lastEntry[0]?.orderNo;      
       let parts = lastCreatedId.split("-");
       let lastParts = parseInt(parts[parts.length - 1], 10) + 1;
       let incrementedLastPart = lastParts.toString().padStart(2, "0");
