@@ -92,6 +92,15 @@ module.exports = {
         "policies": []
       }
     },
+     {
+      method: 'POST',
+      path: '/sendPush',
+      handler: 'appointment.sendPush',
+      config: {
+        policies: [],
+        auth: false, // optional: turn on if needed
+      },
+    },
 
 
   ]
