@@ -7,6 +7,8 @@ const { createCoreController } = require('@strapi/strapi').factories;
 const axios = require('axios');
 import { JWT } from 'google-auth-library';
 // const { sanitizeEntity } = require('strapi-utils');
+import fs from 'fs';
+const serviceAccount = JSON.parse(fs.readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS, 'utf-8'));
 
 let eventSource;
 
@@ -293,80 +295,81 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
       },
       
 
-   async sendPush(ctx) {
-    const { token, title, body } = ctx.request.body;
-if (!token || !title || !body) {
-      ctx.throw(400, 'Missing token, title, or body');
-    }
-    const deviceToken = Array.isArray(token) ? token[0] : token;
- let serviceAccount= process.env.GOOGLE_APPLICATION_CREDENTIALS as any
- console.log(serviceAccount);
- 
-try {
-  const client = new JWT({
-    email: serviceAccount.client_email,
-    key: serviceAccount.private_key,
-    scopes: ['https://www.googleapis.com/auth/firebase.messaging'],
-  });
+async sendPush(ctx) {
+  const { token, title, body } = ctx.request.body;
 
-  await client.authorize();
-  const accessToken = (await client.getAccessToken()).token;
+  if (!token || !title || !body) {
+    ctx.throw(400, 'Missing token, title, or body');
+  }
 
-  const url = `https://fcm.googleapis.com/v1/projects/${serviceAccount.project_id}/messages:send`;
+  const deviceToken = Array.isArray(token) ? token[0] : token;
 
-  const message = {
-    message: {
-      token: deviceToken,
-      notification: {
-        title: title,
-        body: body,
-      },
-      android: {
-        notification: {
-          click_action: "OPEN_ACTIVITY_1",
-        },
-      },
-      apns: {
-        headers: {
-          "apns-priority": "10",
-        },
-        payload: {
-          aps: {
-            alert: {
-              title: title,
-              body: body,
-            },
-            sound: "default",
-            badge: 1,
-          },
-        },
-      },
-      webpush: {
-        headers: {
-          TTL: "86400",
-        },
+  try {
+    const client = new JWT({
+      email: serviceAccount.client_email,
+      key: serviceAccount.private_key,
+      scopes: ['https://www.googleapis.com/auth/firebase.messaging'],
+    });
+
+    await client.authorize();
+    const accessToken = (await client.getAccessToken()).token;
+
+    const url = `https://fcm.googleapis.com/v1/projects/${serviceAccount.project_id}/messages:send`;
+
+    const message = {
+      message: {
+        token: deviceToken,
         notification: {
           title: title,
           body: body,
         },
+        android: {
+          notification: {
+            click_action: "OPEN_ACTIVITY_1",
+          },
+        },
+        apns: {
+          headers: {
+            "apns-priority": "10",
+          },
+          payload: {
+            aps: {
+              alert: {
+                title: title,
+                body: body,
+              },
+              sound: "default",
+              badge: 1,
+            },
+          },
+        },
+        webpush: {
+          headers: {
+            TTL: "86400",
+          },
+          notification: {
+            title: title,
+            body: body,
+          },
+        },
       },
-    },
-  };
+    };
 
-  const response = await axios.post(url, message, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-  });
+    const response = await axios.post(url, message, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
-  ctx.send({ status: 'success', data: response.data });
+    ctx.send({ status: 'success', data: response.data });
 
-} catch (error) {
-  ctx.send({
-    status: 'error',
-    message: 'Failed to send push notification',
-    details: error.response?.data || error.message,
-  });
-}}
+  } catch (error) {
+    ctx.send({
+      status: 'error',
+      message: 'Failed to send push notification',
+      details: error.response?.data || error.message,
+    });
+  }
+}
 }));
