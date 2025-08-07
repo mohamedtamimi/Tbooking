@@ -1,18 +1,20 @@
-export default {
-  /**
-   * An asynchronous register function that runs before
-   * your application is initialized.
-   *
-   * This gives you an opportunity to extend code.
-   */
+const socketIO = require('socket.io');
+
+module.exports = {
   register(/*{ strapi }*/) {},
 
-  /**
-   * An asynchronous bootstrap function that runs before
-   * your application gets started.
-   *
-   * This gives you an opportunity to set up your data model,
-   * run jobs, or perform some special logic.
-   */
-  bootstrap(/*{ strapi }*/) {},
+  bootstrap({ strapi }) {
+    const io = socketIO(strapi.server.httpServer, {
+      cors: {
+        origin: '*', // Adjust this to your web admin domain in production
+        methods: ['GET', 'POST'],
+      },
+    });
+
+    strapi.io = io; // Make io accessible in lifecycles
+
+    io.on('connection', (socket) => {
+      console.log('Web admin connected to socket:', socket.id);
+    });
+  },
 };

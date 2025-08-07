@@ -2,6 +2,7 @@
   "extends": "@strapi/typescript-utils/tsconfigs/server",
   "compilerOptions": {
     "outDir": "dist",
+     "typeRoots": ["./node_modules/@types", "./src/types"],
     "rootDir": "."
   },
   "include": [
