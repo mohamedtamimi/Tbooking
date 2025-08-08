@@ -137,7 +137,8 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
         }
     
             const newNumber = `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year.toString().padStart(2, '0')}-${lastPart}`;
-
+        console.log('newNumber', newNumber);
+        
         try {
             const createAppo = await strapi.entityService.create('api::appointment.appointment', {
                 data: {
