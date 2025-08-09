@@ -73,10 +73,10 @@
       "type": "string"
     },
     "createBy": {
-      "type": "json"
+      "type": "text"
     },
     "appoBy": {
-      "type": "json"
+      "type": "text"
     }
   }
 }
