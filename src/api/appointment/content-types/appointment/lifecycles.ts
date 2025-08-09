@@ -10,6 +10,7 @@ module.exports = {
         strapi.io.emit('new-appointment', {
           id: result.id,
           name: result.name,
+          number: result.number,
           phone: result.phone,
           createdAt: result.createdAt,
         });
