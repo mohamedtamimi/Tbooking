@@ -97,7 +97,7 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
     },
     
     async booking(ctx) {
-        const { firstName, middleName, lastName, phone, expoPushToken, fromDate, toDate, address, approved, employee, createBy, appoBy, deposit } = ctx.request.body;
+        const { firstName, middleName, lastName, phone, expoPushToken, fromDate, toDate, address, approved,platform, employee, bookBy, confirmBy, deposit } = ctx.request.body;
         const lastEntry = await strapi.db.query('api::appointment.appointment').findMany({
             orderBy: { createdAt: 'desc' },
             limit: 1,
@@ -150,9 +150,9 @@ module.exports = createCoreController('api::appointment.appointment', ({ strapi 
                         lastName
                     },
                     expoPushToken,
-                    phone, fromDate, address, createBy,
-                    number: newNumber,appoBy,
-                    toDate, approved, deposit,
+                    phone, fromDate, address, bookBy,
+                    number: newNumber,confirmBy,
+                    toDate, approved, deposit,platform,
                     hide: false,
                 }
             });

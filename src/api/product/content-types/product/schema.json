@@ -56,6 +56,12 @@
     },
     "deletedBy": {
       "type": "string"
+    },
+    "stock_adjustment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::stock-adjustment.stock-adjustment",
+      "mappedBy": "product"
     }
   }
 }

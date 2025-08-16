@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "stock_adjustments",
+  "info": {
+    "singularName": "stock-adjustment",
+    "pluralName": "stock-adjustments",
+    "displayName": "StockAdjustments",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "note": {
+      "type": "string"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product",
+      "inversedBy": "stock_adjustment"
+    },
+    "change_qty": {
+      "type": "integer"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "user": {
+      "type": "json"
+    },
+    "cost": {
+      "type": "decimal"
+    }
+  }
+}

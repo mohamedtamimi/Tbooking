@@ -72,11 +72,15 @@
     "expoPushToken": {
       "type": "string"
     },
-    "createBy": {
-      "type": "text"
+    "bookBy": {
+      "type": "json"
     },
-    "appoBy": {
-      "type": "text"
+    "confirmBy": {
+      "type": "json"
+    },
+    "platform": {
+      "type": "string",
+      "required": true
     }
   }
 }
